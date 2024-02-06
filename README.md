@@ -28,4 +28,4 @@ A JSON parsing API written in Python using Django MVC architecture based framewo
 
 ## License
 
-Licensed under [MIT License](https://github.com/divine-within/json-parsing-django/blob/main/LICENSE)
+Licensed under [MIT License](https://github.com/divine-within/django-json-parser/blob/main/LICENSE)
