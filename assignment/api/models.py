@@ -2,60 +2,71 @@ from django.db import models
 
 
 class AttributeName(models.Model):
-    id = models.IntegerField(primary_key=True)
-    nazev = models.CharField(max_length=255)
-    kod = models.CharField(max_length=255, blank=True, null=True)
-    zobrazit = models.BooleanField(default=False)
+    name = models.CharField(max_length=255)
+    code = models.CharField(max_length=255, blank=True, null=True)
+    display = models.BooleanField(default=False, blank=True)
 
     def __str__(self):
-        return self.nazev
+        return self.name
 
 
 class AttributeValue(models.Model):
-    id = models.IntegerField(primary_key=True)
-    hodnota = models.CharField(max_length=255)
+    value = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.hodnota
+        return self.value
 
 
 class Attribute(models.Model):
-    id = models.IntegerField(primary_key=True)
-    nazev_atributu = models.ForeignKey(AttributeName, on_delete=models.CASCADE)
-    hodnota_atributu = models.ForeignKey(AttributeValue, on_delete=models.CASCADE)
+    attribute_name = models.ForeignKey(AttributeName, on_delete=models.CASCADE)
+    attribute_value = models.ForeignKey(AttributeValue, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.attribute_name.name
 
 
 class Product(models.Model):
-    id = models.IntegerField(primary_key=True)
-    nazev = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
     description = models.TextField()
-    cena = models.DecimalField(max_digits=10, decimal_places=2)
-    mena = models.CharField(max_length=3)
-    published_on = models.DateTimeField(null=True, blank=True)
-    is_published = models.BooleanField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3)
+    published_on = models.DateTimeField(null=True)
+    is_published = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
 
 
 class ProductAttributes(models.Model):
-    id = models.IntegerField(primary_key=True)
     attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.product.name
+
 
 class Image(models.Model):
-    id = models.IntegerField(primary_key=True)
-    obrazek = models.URLField()
+    name = models.CharField(max_length=255, null=True)
+    image = models.URLField()
+
+    def __str__(self):
+        return self.image
 
 
 class ProductImage(models.Model):
-    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    obrazek_id = models.ForeignKey(Image, on_delete=models.CASCADE)
-    nazev = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.product.name
 
 
 class Catalog(models.Model):
-    id = models.IntegerField(primary_key=True)
-    nazev = models.CharField(max_length=255)
-    obrazek_id = models.ForeignKey(Image, on_delete=models.CASCADE)
-    products_ids = models.JSONField()
-    attributes_ids = models.JSONField()
+    name = models.CharField(max_length=255)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE, null=True)
+    products = models.ManyToManyField(Product)
+    attributes = models.ManyToManyField(Attribute)
+
+    def __str__(self):
+        return self.name

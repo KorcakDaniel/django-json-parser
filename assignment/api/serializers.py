@@ -10,50 +10,62 @@ from .models import (
     Catalog,
 )
 
+"""Had a source argument with PrimaryKeyRelatedFields and so on, to map it
+to the unified model structure, but decided that unifying the input would be
+better and probably desired."""
+
 
 class AttributeNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = AttributeName
-        fields = "__all__"
+        fields = ("id", "name", "code", "display")
 
 
 class AttributeValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = AttributeValue
-        fields = "__all__"
+        fields = ("id", "value")
 
 
 class AttributeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attribute
-        fields = "__all__"
+        fields = ("id", "attribute_name", "attribute_value")
 
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = (
+            "id",
+            "name",
+            "description",
+            "price",
+            "currency",
+            "published_on",
+            "is_published",
+        )
 
 
 class ProductAttributesSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductAttributes
-        fields = "__all__"
+        fields = ("id", "attribute", "product")
 
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = "__all__"
+        fields = ("id", "name", "image")
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
-        fields = "__all__"
+        fields = ("id", "name", "image", "product")
 
 
 class CatalogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Catalog
-        fields = "__all__"
+        fields = ("id", "name", "image", "products", "attributes")
