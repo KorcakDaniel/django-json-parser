@@ -1,4 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
+from django.shortcuts import get_list_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import JSONParser
@@ -54,7 +56,7 @@ def getModel(_, model_name):
     try:
         model = apps.get_model("api", model_name)
     except LookupError:
-        return Response({"message": f"{model_name} is not a valid model."})
+        raise Http404(f"{model_name} is not a valid model.")
     queryset = model.objects.all()
     serializer_ref = globals().get(f"{model_name}Serializer")
     serializer = serializer_ref(queryset, many=True)
@@ -66,8 +68,8 @@ def getEntry(_, model_name, id):
     try:
         model = apps.get_model("api", model_name)
     except LookupError:
-        return Response({"message": f"{model_name} is not a valid model."})
-    queryset = model.objects.filter(id=id)
+        raise Http404(f"{model_name} is not a valid model.")
+    queryset = get_list_or_404(model, id=id)
     serializer_ref = globals().get(f"{model_name}Serializer")
     serializer = serializer_ref(queryset, many=True)
     return Response({"message": serializer.data})
