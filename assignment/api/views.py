@@ -4,6 +4,7 @@ from django.shortcuts import get_list_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import JSONParser
+from rest_framework.exceptions import ValidationError
 from django.apps import apps
 
 from .serializers import (
@@ -24,10 +25,12 @@ def importData(request):
     errors = []
     data = []
     for item in request.data:
-        model_name = list(item.keys())[0]
-
         try:
+            model_name = list(item.keys())[0]
             model = apps.get_model("api", model_name)
+        except AttributeError:
+            ValidationError.status_code = 422
+            raise ValidationError({"message": "Please provide a valid JSON object."})
         except LookupError:
             return Response({"message": f"{model_name} is not a valid model."})
 
