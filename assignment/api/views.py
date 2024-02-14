@@ -21,7 +21,7 @@ from .serializers import (
 
 @api_view(["POST"])
 @parser_classes([JSONParser])
-def importData(request):
+def import_data(request):
     errors = []
     data = []
     for item in request.data:
@@ -55,7 +55,7 @@ def importData(request):
 
 
 @api_view(["GET"])
-def getModel(_, model_name):
+def get_model(_, model_name):
     try:
         model = apps.get_model("api", model_name)
     except LookupError:
@@ -67,7 +67,7 @@ def getModel(_, model_name):
 
 
 @api_view(["GET"])
-def getEntry(_, model_name, id):
+def get_entry(_, model_name, id):
     try:
         model = apps.get_model("api", model_name)
     except LookupError:
