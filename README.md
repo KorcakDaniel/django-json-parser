@@ -18,8 +18,27 @@ A JSON parsing API written in Python using Django MVC architecture based framewo
 4. Run this command to get your personal secret key
    - `python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'`
 5. Copy the key and save it as an environment variable following [this](https://www3.ntu.edu.sg/home/ehchua/programming/howto/Environment_Variables.html) guide
-6. Run the application inside the project directory `python3 manage.py runserver`
-7. Now the application should be working
+6. To create the defined database schema, run `python3 manage.py migrate`
+7. Run the application with the following `python3 manage.py runserver`
+
+## Usage
+
+1. Import data similar to the `data/test_data.json`, using the `/import` endpoint
+2. Retreive the imported model, using `/detail/<modelname>` endpoint
+3. Retreive the model data, using `/detail/<modelname>/<id>` endpoint
+
+Disclaimer: The API works only with models specified below.
+
+## Implemented models and their serializers
+
+- Catalog
+- Image
+- Attribute
+- AttributeName
+- AttributeValue
+- Product
+- ProductImage
+- ProductAttributes
 
 ## Dependencies
 
